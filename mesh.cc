@@ -4,6 +4,7 @@
 
 #include "gl_error.hh"
 #include "mesh.hh"
+#include "mesh_loader.hh"
 
 Mesh::Mesh() {
   m_vao_handle = 0;
@@ -22,9 +23,9 @@ Mesh::~Mesh() {
   }
 }
 
-bool Mesh::load_from( int num_vertices, float *vertices ) {
+bool Mesh::load_from( const MeshLoader &ml ) {
 
-  m_num_vertices = num_vertices;
+  m_num_vertices = ml.vertex_count();
 
   //VBO
   glGenBuffers(1, &m_vbo_handle);
@@ -35,7 +36,7 @@ bool Mesh::load_from( int num_vertices, float *vertices ) {
   gl_catch_errors( "glBindBuffer" );
 
   /* Upload vertex data to the video device */
-  glBufferData(GL_ARRAY_BUFFER, num_vertices * 3 * sizeof(float), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, ml.vertex_byte_size(), ml.vertex_ptr(), GL_STATIC_DRAW);
   gl_catch_errors( "glBufferData" );
 
 

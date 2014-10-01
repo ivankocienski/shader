@@ -2,6 +2,7 @@
 #pragma once
 
 #include <GL/gl.h>
+#include "mesh_loader.hh"
 
 class Mesh {
 private:
@@ -16,7 +17,7 @@ public:
   Mesh();
   ~Mesh();
 
-  bool load_from( int, float* );
+  bool load_from( const MeshLoader& );
   void set_shader_attribute( GLuint );
 
   GLuint vao_handle();

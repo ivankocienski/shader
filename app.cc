@@ -5,12 +5,10 @@
 
 #include "app.hh"
 #include "globals.hh"
+#include "mesh_loader.hh"
+#include "mesh.hh"
+#include "shader.hh"
 
-static float vertex_data[3][3] = {
-  {  0.0,  1.0, 1.0  },
-  { -1.0, -1.0, 1.0  },
-  {  1.0, -1.0, 1.0  }
-};
 
 const char *vertex_shader = 
   "#version 130\n" // Specify which version of GLSL we are using.
@@ -49,7 +47,10 @@ void App::init() {
 
   glClearColor( 0, 0, 1, 0 );
 
-  m_mesh.load_from( 3, (float *)vertex_data ); 
+  MeshLoader ml;
+  ml.load_from_obj_file( "data/bunny.obj" );
+
+  m_mesh.load_from( ml ); 
   m_mesh.set_shader_attribute(0);
 
   m_shader.load_vertex_from( vertex_shader );
@@ -83,17 +84,21 @@ void App::tick() {
     -5.0
   );
 
+  glScalef( 0.5, 0.5, 0.5 );
+  glTranslatef( 0, 0, -20 );
+
   m_shader.use();
   m_mesh.bind_and_draw();
 
-  Shader::use_default();
-
-  glColor3f( 0, 1, 0 );
-  
-  glBegin(GL_TRIANGLES);
-		glVertex3f( -0.5, -0.5, 1.0 );
-		glVertex3f(  0.5,  0.0, 1.0 );
-		glVertex3f(  0.0,  0.5, 1.0 );
-	glEnd();
+/*   Shader::use_default();
+ * 
+ *   glColor3f( 0, 1, 0 );
+ *   
+ *   glBegin(GL_TRIANGLES);
+ * 		glVertex3f( -0.5, -0.5, 1.0 );
+ * 		glVertex3f(  0.5,  0.0, 1.0 );
+ * 		glVertex3f(  0.0,  0.5, 1.0 );
+ * 	glEnd();
+ */
 }
 
