@@ -6,6 +6,7 @@
 
 #include "app.hh"
 #include "exception.hh"
+#include "globals.hh"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ int main( int argc, char** argv ) {
 
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    window = glfwCreateWindow( 640, 480, "shader demo", NULL, NULL );
+    window = glfwCreateWindow( g_xres, g_yres, "shader demo", NULL, NULL );
     if(!window) {
       raise( "could not open window" );
     }

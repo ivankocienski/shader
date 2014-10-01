@@ -2,8 +2,16 @@
 #pragma once
 
 #include <GL/gl.h>
+#include "gl_error.hh"
 
 class Shader {
+public:
+
+  static void use_default() {
+    glUseProgram(0);
+    gl_catch_errors( "glUseProgram" );
+  }
+
 private:
 
   GLuint m_vertex;
@@ -23,6 +31,8 @@ public:
 
   void bind_attribute( GLuint, const char* );
   void link();
+
+  void use();
 
 };
 

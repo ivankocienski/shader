@@ -8,7 +8,8 @@ OBJECTS= \
 	main.o \
 	mesh.o \
 	app.o \
-	shader.o
+	shader.o \
+	globals.o
 
 
 all: $(OBJECTS)

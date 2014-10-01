@@ -109,3 +109,7 @@ void Shader::do_compile( GLuint target, const char* src, const char* type ) {
   }
 }
 
+void Shader::use() {
+  glUseProgram(m_program);
+  gl_catch_errors( "glUseProgram" );
+}
