@@ -7,7 +7,8 @@ LIBS=-lglfw -lGL -lGLU -lGLEW
 OBJECTS= \
 	main.o \
 	mesh.o \
-	app.o
+	app.o \
+	shader.o
 
 
 all: $(OBJECTS)
