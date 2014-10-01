@@ -16,7 +16,7 @@ OBJECTS= \
 all: $(OBJECTS)
 	g++ -g $(OBJECTS) $(LFLAGS) -o $(OUTFILE) $(LIBS)
 
-.c.o:
+.cc.o:
 	g++ $< -c $(CFLAGS) -o $@
 
 tags: FORCE

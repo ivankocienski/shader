@@ -50,7 +50,8 @@ void App::init() {
   MeshLoader ml;
   ml.load_from_obj_file( "data/bunny.obj" );
 
-  m_mesh.load_from( ml ); 
+  m_mesh.load_vertices_from( ml ); 
+  m_mesh.load_indices_from( ml ); 
   m_mesh.set_shader_attribute(0);
 
   m_shader.load_vertex_from( vertex_shader );

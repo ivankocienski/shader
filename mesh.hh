@@ -8,20 +8,30 @@ class Mesh {
 private:
 
   GLuint m_vao_handle;
-  GLuint m_vbo_handle;
+
+  GLuint m_vertex_vbo;
+  GLuint m_index_vbo;
+
   int m_num_vertices;
+  int m_num_indices;
+
   GLuint m_shader_attribute;
 
+  void create_vao();
+  
 public:
 
   Mesh();
   ~Mesh();
 
-  bool load_from( const MeshLoader& );
+  void load_vertices_from( const MeshLoader& );
+  void load_indices_from( const MeshLoader& );
+
   void set_shader_attribute( GLuint );
 
-  GLuint vao_handle();
-  GLuint vbo_handle();
+  GLuint object_handle();
+  GLuint vertex_object_handle();
+  GLuint index_object_handle();
 
   void bind();
   void draw();
