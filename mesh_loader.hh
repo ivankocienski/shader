@@ -5,10 +5,14 @@
 #include <vector>
 
 class MeshLoader {
+public:
+
+  typedef unsigned short index_t;
+
 private:
 
-  std::vector<float> m_vertex_data;
-  std::vector<int> m_index_data;
+  std::vector<float>   m_vertex_data;
+  std::vector<index_t> m_index_data;
 
 public:
 
@@ -23,6 +27,8 @@ public:
   size_t index_count() const;
 
   const float* vertex_ptr() const;
-  const int* index_ptr() const;
+  const index_t* index_ptr() const;
+
+  const std::vector<index_t> & index_data() const;
 };
 

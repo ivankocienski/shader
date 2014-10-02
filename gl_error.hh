@@ -3,6 +3,7 @@
 
 #include <GL/gl.h>
 #include <sstream>
+#include <string>
 
 #include "exception.hh"
 
@@ -11,7 +12,8 @@
   if( err != GL_NO_ERROR ) { \
     std::stringstream ss; \
     ss << "GL error (" << err << ") " << gluErrorString(err) << ": " << msg; \
-    raise(ss); \
+    std::string str(ss.str()); \
+    raise(str); \
   } \
 }
 

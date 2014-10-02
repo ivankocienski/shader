@@ -37,9 +37,9 @@ void MeshLoader::load_from_obj_file( const char *fp ) {
     }
 
     if( regex_match( line, capture, index_r )) {
-      m_index_data.push_back( lexical_cast<int>(capture[1]) );
-      m_index_data.push_back( lexical_cast<int>(capture[2]) );
-      m_index_data.push_back( lexical_cast<int>(capture[3]) ); 
+      m_index_data.push_back( lexical_cast<index_t>(capture[1]) );
+      m_index_data.push_back( lexical_cast<index_t>(capture[2]) );
+      m_index_data.push_back( lexical_cast<index_t>(capture[3]) ); 
 
       ind_count++;
     }
@@ -60,7 +60,7 @@ size_t MeshLoader::vertex_byte_size() const {
 }
 
 size_t MeshLoader::index_byte_size() const {
-  return m_index_data.size() * sizeof(float);
+  return m_index_data.size() * sizeof(index_t);
 }
 
 size_t MeshLoader::vertex_count() const {
@@ -75,6 +75,10 @@ const float *MeshLoader::vertex_ptr() const {
   return m_vertex_data.data();
 }
 
-const int* MeshLoader::index_ptr() const {
+const MeshLoader::index_t* MeshLoader::index_ptr() const {
   return m_index_data.data();
+}
+
+const vector<MeshLoader::index_t> & MeshLoader::index_data() const {
+  return m_index_data;
 }

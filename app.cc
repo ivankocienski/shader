@@ -18,7 +18,7 @@ const char *vertex_shader =
 
   "void main()\n"
   "{\n"
-  "  gl_Position = vec4(in_Position.x, in_Position.y, in_Position.z, 1.0);\n"
+  "  gl_Position = ftransform();\n"
   "}";
 
 const char *fragment_shader = 
@@ -38,6 +38,8 @@ App::App() {
 
 void App::init() {
   
+  m_angle = 0;
+
   glViewport( 0, 0, g_xres, g_yres ); 
 
   glMatrixMode(GL_PROJECTION);  
@@ -49,9 +51,9 @@ void App::init() {
 
   MeshLoader ml;
   ml.load_from_obj_file( "data/bunny.obj" );
+  //ml.load_from_obj_file( "data/quad.obj" );
 
-  m_mesh.load_vertices_from( ml ); 
-  m_mesh.load_indices_from( ml ); 
+  m_mesh.load_from( ml ); 
   m_mesh.set_shader_attribute(0);
 
   m_shader.load_vertex_from( vertex_shader );
@@ -64,6 +66,8 @@ void App::init() {
 
 void App::tick() {
 
+  m_angle += 0.2;
+  
   glLoadIdentity();     
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -85,8 +89,9 @@ void App::tick() {
     -5.0
   );
 
-  glScalef( 0.5, 0.5, 0.5 );
-  glTranslatef( 0, 0, -20 );
+  glTranslatef( 0, -1.5, 0.0 );
+  glScalef( 0.2, 0.2, 0.2 );
+  glRotatef( m_angle, 0.0, 0.1, 0 );
 
   m_shader.use();
   m_mesh.bind_and_draw();

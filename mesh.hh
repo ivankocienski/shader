@@ -2,30 +2,30 @@
 #pragma once
 
 #include <GL/gl.h>
+#include <vector>
+
 #include "mesh_loader.hh"
 
 class Mesh {
 private:
 
+  std::vector<MeshLoader::index_t> m_index_data;
+
   GLuint m_vao_handle;
 
-  GLuint m_vertex_vbo;
-  GLuint m_index_vbo;
+  GLuint m_objects[2];
 
   int m_num_vertices;
   int m_num_indices;
 
   GLuint m_shader_attribute;
 
-  void create_vao();
-  
 public:
 
   Mesh();
   ~Mesh();
 
-  void load_vertices_from( const MeshLoader& );
-  void load_indices_from( const MeshLoader& );
+  void load_from( const MeshLoader& );
 
   void set_shader_attribute( GLuint );
 

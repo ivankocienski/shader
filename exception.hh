@@ -6,9 +6,9 @@
 #define raise(msg) { \
   std::stringstream ss; \
 \
-  ss << "("  << __FILE__; \
+  ss << "("   << __FILE__; \
   ss << " @ " << __LINE__; \
-  ss << ") "   << msg; \
+  ss << ") "  << msg; \
 \
   throw ss.str().c_str(); \
 }
