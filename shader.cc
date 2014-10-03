@@ -7,6 +7,41 @@
 #include "shader.hh"
 #include "gl_error.hh"
 
+/*
+ * SHADER UNIFORM VARIABLE CLASS
+ *
+ */
+
+using namespace std;
+
+ShaderUniformVar::ShaderUniformVar() { 
+  m_handle = 0;
+}
+
+ShaderUniformVar::ShaderUniformVar( GLuint p_id, const char *n ) {
+  m_handle = glGetUniformLocation(p_id, n);
+  gl_catch_errors( "glUseProgram" );
+  cout << "m_handle=" << m_handle << endl;
+}
+
+void ShaderUniformVar::set( float v ) {
+  glUniform1f(m_handle, v);
+  gl_catch_errors( "glUniform1f" );
+}
+
+void ShaderUniformVar::set( float v1, float v2, float v3 ) {
+  float a[] = { v1, v2, v3 };
+  //if(!m_handle) raise( "bad end" );
+  glUniform3fv(m_handle, 1, a);
+  gl_catch_errors( "glUniform3fv" );
+}
+
+/*
+ * SHADER CLASS
+ *
+ */
+
+
 Shader::Shader() {
   m_vertex   = 0;
   m_fragment = 0;
@@ -112,4 +147,8 @@ void Shader::do_compile( GLuint target, const char* src, const char* type ) {
 void Shader::use() {
   glUseProgram(m_program);
   gl_catch_errors( "glUseProgram" );
+}
+
+ShaderUniformVar Shader::get_uniform_var( const char *n ) {
+  return ShaderUniformVar( m_program, n );
 }

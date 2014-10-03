@@ -17,7 +17,7 @@ Mesh::Mesh() {
 }
 
 Mesh::~Mesh() {
-  glDeleteBuffers( 2, m_objects );
+  glDeleteBuffers( 3, m_objects );
   gl_catch_errors( "glDeleteBuffers" );
 
   if(m_vao_handle) { 
@@ -30,9 +30,8 @@ void Mesh::load_from( const MeshLoader &ml ) {
 
   m_num_vertices = ml.vertex_count();
   m_num_indices  = ml.index_count();
-  m_index_data   = ml.index_data();
 
-  glGenBuffers(2, m_objects);
+  glGenBuffers(3, m_objects);
   gl_catch_errors( "glGenBuffers" );
 
   cout << "m_num_vertices=" << m_num_vertices << endl;
@@ -61,6 +60,20 @@ void Mesh::load_from( const MeshLoader &ml ) {
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
   gl_catch_errors( "glVertexAttribPointer" );
 
+  //
+  // create normal VBO
+  //
+  glBindBuffer(GL_ARRAY_BUFFER, m_objects[1]);
+  gl_catch_errors( "glBindBuffer" );
+
+  /* Upload vertex data to the video device */
+  glBufferData(GL_ARRAY_BUFFER, ml.normal_byte_size(), ml.normal_ptr(), GL_STATIC_DRAW);
+  gl_catch_errors( "glBufferData" );
+
+  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  gl_catch_errors( "glVertexAttribPointer" );
+
+
 
   //
   // create index VBO
@@ -85,8 +98,8 @@ void Mesh::load_from( const MeshLoader &ml ) {
   glDisableVertexAttribArray(1);
   gl_catch_errors( "glEnableVertexAttribArray" );
 
-  // no normals
-	glDisableVertexAttribArray(2);
+  // normals
+	glEnableVertexAttribArray(2);
   gl_catch_errors( "glEnableVertexAttribArray" );
 
 	// index

@@ -4,6 +4,20 @@
 #include <GL/gl.h>
 #include "gl_error.hh"
 
+class ShaderUniformVar {
+private:
+
+  GLuint m_handle;
+
+public:
+
+  ShaderUniformVar();
+  ShaderUniformVar(GLuint, const char* );
+
+  void set( float );
+  void set( float, float, float );
+};
+
 class Shader {
 public:
 
@@ -33,6 +47,8 @@ public:
   void link();
 
   void use();
+
+  ShaderUniformVar get_uniform_var( const char* );
 
 };
 

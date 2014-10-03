@@ -15,9 +15,13 @@ const char *vertex_shader =
  
   // in_Position was bound to attribute index 0("shaderAttribute")
   "in  vec3 in_Position;\n"
+  "in  vec3 in_Normal;\n"
+  "uniform vec3 lightDir;\n"
+  "varying float intensity;\n"
 
   "void main()\n"
   "{\n"
+  "  intensity = dot(lightDir, in_Normal);\n"
   "  gl_Position = ftransform();\n"
   "}";
 
@@ -27,10 +31,11 @@ const char *fragment_shader =
   "precision highp float;\n" // Video card drivers require this line to function properly
  
   "out vec4 fragColor;\n"
+  "varying float intensity;\n"
  
   "void main()\n"
   "{\n"
-  "  fragColor = vec4(1.0,0.0,0.0,1.0);\n" 
+  "  fragColor = vec4(intensity, 0.0, 0.0, 1.0);\n" 
   "}";
 
 App::App() { 
@@ -50,7 +55,7 @@ void App::init() {
   glClearColor( 0, 0, 1, 0 );
 
   MeshLoader ml;
-  ml.load_from_obj_file( "data/bunny.obj" );
+  ml.load_from_obj_file( "data/bunny-normalized.obj" );
   //ml.load_from_obj_file( "data/quad.obj" );
 
   m_mesh.load_from( ml ); 
@@ -60,8 +65,13 @@ void App::init() {
   m_shader.load_fragment_from( fragment_shader );
   
   m_shader.bind_attribute( 0, "in_Position" );
+  m_shader.bind_attribute( 2, "in_Normal" );
 
   m_shader.link(); 
+
+  m_shader.use();
+  m_light_vector = m_shader.get_uniform_var( "lightDir" );
+
 }
 
 void App::tick() {
@@ -94,6 +104,8 @@ void App::tick() {
   glRotatef( m_angle, 0.0, 0.1, 0 );
 
   m_shader.use();
+
+  m_light_vector.set( 1, 0, 0 );
   m_mesh.bind_and_draw();
 
 /*   Shader::use_default();

@@ -11,6 +11,9 @@ private:
   Shader m_shader;
   float  m_angle;
 
+  ShaderUniformVar m_light_vector;
+  
+
 public:
 
   App();

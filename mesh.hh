@@ -9,11 +9,9 @@
 class Mesh {
 private:
 
-  std::vector<MeshLoader::index_t> m_index_data;
-
   GLuint m_vao_handle;
 
-  GLuint m_objects[2];
+  GLuint m_objects[3];
 
   int m_num_vertices;
   int m_num_indices;
