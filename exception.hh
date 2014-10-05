@@ -3,7 +3,7 @@
 
 #include <sstream>
 
-#define raise(msg) { \
+#define kraise(msg) { \
   std::stringstream ss; \
 \
   ss << "("   << __FILE__; \

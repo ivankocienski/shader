@@ -20,11 +20,11 @@ Mesh::Mesh() {
 Mesh::~Mesh() {
 
   glDeleteBuffers( 2, m_objects );
-  gl_catch_errors( "glDeleteBuffers" );
+  //gl_catch_errors( "glDeleteBuffers" );
 
   if(m_vao_handle) { 
     glDeleteVertexArrays( 1, &m_vao_handle );
-    gl_catch_errors( "glDeleteVertexArrays" );
+    //gl_catch_errors( "glDeleteVertexArrays" );
   }
 
   if( m_vertex_data ) free(m_vertex_data);
@@ -36,7 +36,7 @@ void Mesh::load_from( const MeshLoader &ml ) {
   m_num_indices  = ml.index_count();
 
   m_vertex_data = (MeshLoader::node_p)malloc( ml.data_byte_size() );
-  if( !m_num_vertices ) raise( "failed to allocate mesh vertex buffer" );
+  if( !m_num_vertices ) kraise( "failed to allocate mesh vertex buffer" );
 
   ml.write_vertex_data_to_buffer( m_vertex_data );
 

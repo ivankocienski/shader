@@ -9,35 +9,6 @@
 #include "mesh.hh"
 #include "shader.hh"
 
-
-const char *vertex_shader = 
-  "#version 130\n" // Specify which version of GLSL we are using.
- 
-  // in_Position was bound to attribute index 0("shaderAttribute")
-  "in  vec3 in_Position;\n"
-  "in  vec3 in_Normal;\n"
-  "uniform vec3 lightDir;\n"
-  "varying float intensity;\n"
-
-  "void main()\n"
-  "{\n"
-  "  intensity = dot(lightDir, in_Normal);\n"
-  "  gl_Position = ftransform();\n"
-  "}";
-
-const char *fragment_shader = 
-  "#version 130\n" // Specify which version of GLSL we are using.
- 
-  "precision highp float;\n" // Video card drivers require this line to function properly
- 
-  "out vec4 fragColor;\n"
-  "varying float intensity;\n"
- 
-  "void main()\n"
-  "{\n"
-  "  fragColor = vec4(intensity, 0.4, 0.0, 1.0);\n" 
-  "}";
-
 App::App() { 
 }
 
@@ -64,8 +35,8 @@ void App::init() {
   m_mesh.load_from( ml ); 
   m_mesh.set_shader_attribute(0);
 
-  m_shader.load_vertex_from( vertex_shader );
-  m_shader.load_fragment_from( fragment_shader );
+  m_shader.vertex().load_from( "data/vertex.vs" );
+  m_shader.fragment().load_from( "data/fragment.fs" );
   
   m_shader.bind_attribute( 0, "in_Position" );
   m_shader.bind_attribute( 1, "in_Normal" );

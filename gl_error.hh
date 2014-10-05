@@ -13,7 +13,7 @@
     std::stringstream ss; \
     ss << "GL error (" << err << ") " << gluErrorString(err) << ": " << msg; \
     std::string str(ss.str()); \
-    raise(str); \
+    kraise(str); \
   } \
 }
 

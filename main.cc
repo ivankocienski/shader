@@ -20,7 +20,7 @@ int main( int argc, char** argv ) {
     GLFWwindow* window;
 
     if(!glfwInit()) {
-      raise( "could not init glfw" );
+      kraise( "could not init glfw" );
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -30,13 +30,13 @@ int main( int argc, char** argv ) {
 
     window = glfwCreateWindow( g_xres, g_yres, "shader demo", NULL, NULL );
     if(!window) {
-      raise( "could not open window" );
+      kraise( "could not open window" );
     }
     
     glfwMakeContextCurrent(window);
 
     if(glewInit() != GLEW_OK) {
-      raise( "could not init GLEW" );
+      kraise( "could not init GLEW" );
     }
 
     app.init();
@@ -58,7 +58,7 @@ int main( int argc, char** argv ) {
       glfwPollEvents();
     } 
 
-  } catch( char const* msg ) {
+  } catch( char const * msg ) {
     cerr << "E: " << msg << endl; 
     code = -1;
   }
