@@ -135,19 +135,8 @@ void Mesh::draw() {
 void Mesh::bind_and_draw() {
 
   glBindVertexArray (m_vao_handle);
-  //glDrawArrays(GL_TRIANGLES, 0, m_num_vertices);
 
   glDrawElements( GL_TRIANGLES, m_num_indices * 3, GL_UNSIGNED_SHORT, NULL );
-
-/*   glDrawRangeElements(
- *     GL_TRIANGLES,
- *     0,
- *     3,
- *     m_num_indices * 3,
- *     GL_UNSIGNED_SHORT,
- *     NULL
- *   );
- */
 
   glBindVertexArray(0);
 }

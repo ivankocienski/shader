@@ -56,7 +56,6 @@ void App::init() {
 
   glEnable( GL_DEPTH_TEST );
   glEnable( GL_CULL_FACE );
-  //glCullFace( GL_FRONT );
 
   MeshLoader ml;
   ml.load_from_obj_file( "data/bunny-normalized.obj" );
@@ -111,16 +110,5 @@ void App::tick() {
 
   m_light_vector.set( 1, 0, 0 );
   m_mesh.bind_and_draw();
-
-/*   Shader::use_default();
- * 
- *   glColor3f( 0, 1, 0 );
- *   
- *   glBegin(GL_TRIANGLES);
- * 		glVertex3f( -0.5, -0.5, 1.0 );
- * 		glVertex3f(  0.5,  0.0, 1.0 );
- * 		glVertex3f(  0.0,  0.5, 1.0 );
- * 	glEnd();
- */
 }
 
