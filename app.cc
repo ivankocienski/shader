@@ -35,7 +35,7 @@ const char *fragment_shader =
  
   "void main()\n"
   "{\n"
-  "  fragColor = vec4(intensity, 0.0, 0.0, 1.0);\n" 
+  "  fragColor = vec4(intensity, 0.4, 0.0, 1.0);\n" 
   "}";
 
 App::App() { 
@@ -54,6 +54,10 @@ void App::init() {
 
   glClearColor( 0, 0, 1, 0 );
 
+  glEnable( GL_DEPTH_TEST );
+  glEnable( GL_CULL_FACE );
+  //glCullFace( GL_FRONT );
+
   MeshLoader ml;
   ml.load_from_obj_file( "data/bunny-normalized.obj" );
   //ml.load_from_obj_file( "data/quad.obj" );
@@ -65,7 +69,7 @@ void App::init() {
   m_shader.load_fragment_from( fragment_shader );
   
   m_shader.bind_attribute( 0, "in_Position" );
-  m_shader.bind_attribute( 2, "in_Normal" );
+  m_shader.bind_attribute( 1, "in_Normal" );
 
   m_shader.link(); 
 
@@ -76,7 +80,7 @@ void App::init() {
 
 void App::tick() {
 
-  m_angle += 0.2;
+  m_angle += 0.05;
   
   glLoadIdentity();     
 

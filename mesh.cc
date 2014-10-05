@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <cstdlib>
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -17,13 +18,16 @@ Mesh::Mesh() {
 }
 
 Mesh::~Mesh() {
-  glDeleteBuffers( 3, m_objects );
+
+  glDeleteBuffers( 2, m_objects );
   gl_catch_errors( "glDeleteBuffers" );
 
   if(m_vao_handle) { 
     glDeleteVertexArrays( 1, &m_vao_handle );
     gl_catch_errors( "glDeleteVertexArrays" );
   }
+
+  if( m_vertex_data ) free(m_vertex_data);
 }
 
 void Mesh::load_from( const MeshLoader &ml ) {
@@ -31,7 +35,12 @@ void Mesh::load_from( const MeshLoader &ml ) {
   m_num_vertices = ml.vertex_count();
   m_num_indices  = ml.index_count();
 
-  glGenBuffers(3, m_objects);
+  m_vertex_data = (MeshLoader::node_p)malloc( ml.data_byte_size() );
+  if( !m_num_vertices ) raise( "failed to allocate mesh vertex buffer" );
+
+  ml.write_vertex_data_to_buffer( m_vertex_data );
+
+  glGenBuffers(2, m_objects);
   gl_catch_errors( "glGenBuffers" );
 
   cout << "m_num_vertices=" << m_num_vertices << endl;
@@ -46,34 +55,32 @@ void Mesh::load_from( const MeshLoader &ml ) {
   glBindVertexArray(m_vao_handle);
   gl_catch_errors( "glBindVertexArray" );
 
-
-  //
-  // create vertex VBO
-  // 
   glBindBuffer(GL_ARRAY_BUFFER, m_objects[0]);
   gl_catch_errors( "glBindBuffer" );
 
-  /* Upload vertex data to the video device */
-  glBufferData(GL_ARRAY_BUFFER, ml.vertex_byte_size(), ml.vertex_ptr(), GL_STATIC_DRAW);
+  //
+  // the data...
+  //
+  glBufferData(GL_ARRAY_BUFFER, ml.data_byte_size(), m_vertex_data, GL_STATIC_DRAW);
   gl_catch_errors( "glBufferData" );
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  //
+  // define vertex data
+  //
+  glEnableVertexAttribArray(0);
+  gl_catch_errors( "glEnableVertexAttribArray" );
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MeshLoader::node_t), (void*)NULL);
   gl_catch_errors( "glVertexAttribPointer" );
 
   //
-  // create normal VBO
+  // define normal data
   //
-  glBindBuffer(GL_ARRAY_BUFFER, m_objects[1]);
-  gl_catch_errors( "glBindBuffer" );
+  glEnableVertexAttribArray(1);
+  gl_catch_errors( "glEnableVertexAttribArray" );
 
-  /* Upload vertex data to the video device */
-  glBufferData(GL_ARRAY_BUFFER, ml.normal_byte_size(), ml.normal_ptr(), GL_STATIC_DRAW);
-  gl_catch_errors( "glBufferData" );
-
-  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(MeshLoader::node_t), (void*)(sizeof(float) * 3));
   gl_catch_errors( "glVertexAttribPointer" );
-
-
 
   //
   // create index VBO
@@ -85,30 +92,9 @@ void Mesh::load_from( const MeshLoader &ml ) {
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, ml.index_byte_size(), ml.index_ptr(), GL_STATIC_DRAW);
   gl_catch_errors( "glBufferData" );
 
-
   //
   // done
   //
-
-  // vertex
-  glEnableVertexAttribArray(0);
-  gl_catch_errors( "glEnableVertexAttribArray" );
-
-  // no color
-  glDisableVertexAttribArray(1);
-  gl_catch_errors( "glEnableVertexAttribArray" );
-
-  // normals
-	glEnableVertexAttribArray(2);
-  gl_catch_errors( "glEnableVertexAttribArray" );
-
-	// index
-  glEnableVertexAttribArray(3);
-  gl_catch_errors( "glEnableVertexAttribArray" );
-
-  // does this go after we enable it?
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_objects[1]);
-  
   glBindVertexArray(0);
   gl_catch_errors( "glEnableVertexAttribArray" );
 }

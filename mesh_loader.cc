@@ -69,17 +69,21 @@ void MeshLoader::load_from_obj_file( const char *fp ) {
 
 }
 
-size_t MeshLoader::vertex_byte_size() const {
-  return m_vertex_data.size() * sizeof(float);
+size_t MeshLoader::data_byte_size() const {
+  return m_vertex_data.size() * sizeof(node_t);
 }
+
+//size_t MeshLoader::vertex_byte_size() const {
+//  return m_vertex_data.size() * sizeof(float);
+//}
 
 size_t MeshLoader::index_byte_size() const {
   return m_index_data.size() * sizeof(index_t);
 }
 
-size_t MeshLoader::normal_byte_size() const {
-  return m_normal_data.size() * sizeof(float);
-}
+//size_t MeshLoader::normal_byte_size() const {
+//  return m_normal_data.size() * sizeof(float);
+//}
 
 size_t MeshLoader::vertex_count() const {
   return m_vertex_data.size() / 3;
@@ -89,18 +93,47 @@ size_t MeshLoader::index_count() const {
   return m_index_data.size() / 3;
 }
 
-size_t MeshLoader::normal_count() const {
-  return m_normal_data.size() / 3;
-}
+//size_t MeshLoader::normal_count() const {
+//  return m_normal_data.size() / 3;
+//}
 
-const float *MeshLoader::vertex_ptr() const {
-  return m_vertex_data.data();
-}
+//const float *MeshLoader::vertex_ptr() const {
+//  return m_vertex_data.data();
+//}
 
 const MeshLoader::index_t* MeshLoader::index_ptr() const {
   return m_index_data.data();
 }
 
-const float *MeshLoader::normal_ptr() const {
-  return m_normal_data.data();
+//const float *MeshLoader::normal_ptr() const {
+//  return m_normal_data.data();
+//}
+
+void MeshLoader::write_vertex_data_to_buffer( node_p vertex_buffer ) const {
+
+  int count  = m_vertex_data.size();
+  int offset = 0;
+
+  vector<float>::const_iterator v_it = m_vertex_data.begin();
+  vector<float>::const_iterator n_it = m_normal_data.begin();
+
+  while( count ) {
+
+    vertex_buffer->position[offset] = *v_it;
+    vertex_buffer->normal[offset]   = *n_it;
+
+    offset++;
+    if( offset > 2 ) {
+      offset = 0;
+      vertex_buffer++;
+    }
+
+    n_it++;
+    v_it++;
+    count--;
+  }
+
 }
+
+
+

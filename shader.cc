@@ -87,8 +87,31 @@ void Shader::bind_attribute( GLuint a, const char *n ) {
 
 void Shader::link() {
 
+  GLint okay;
+  GLint log_len;
+
   glLinkProgram(m_program);
   gl_catch_errors( "glLinkProgram" );
+
+  glGetProgramiv( m_program, GL_LINK_STATUS, &okay );
+
+  if( !okay ) {
+    cerr << "failed to link" << endl;
+  }
+
+  {
+    GLchar *log_buffer = new GLchar [8192];
+    if( !log_buffer ) raise("could not alloc log buffer");
+
+    glGetProgramInfoLog( m_program, 8192, &log_len, log_buffer );
+    gl_catch_errors( "glGetProgramInfoLog" );
+
+    cerr << log_buffer << endl;
+
+    delete log_buffer;
+  }
+
+  if( !okay ) raise( "stopping" );
 }
 
 void Shader::create_program() {
@@ -120,28 +143,29 @@ void Shader::do_compile( GLuint target, const char* src, const char* type ) {
   if(!compiled) {
 
     std::cerr << "failed to compile " << type << " shader" << std::endl;
-
-    glGetShaderiv(target, GL_INFO_LOG_LENGTH, &out_buffer_len);
-    gl_catch_errors( "glGetShaderiv" );
-
-    if (out_buffer_len)
-    {
-      out_buffer = new char [out_buffer_len];
-      if(!out_buffer ) 
-        raise( "could not alloc out_buffer when compiling shader" );
-
-      glGetShaderInfoLog(target, out_buffer_len, &out_buffer_written, out_buffer);
-      gl_catch_errors( "glGetShaderInfoLog" );
-
-      if( out_buffer_written != out_buffer_len ) {
-        std::cerr << "W: out_buffer_written != out_buffer_len" << std::endl;
-      }
-
-      std::cerr << out_buffer << std::endl;
-
-      raise( "failed to compile shader" );
-    }
   }
+
+  glGetShaderiv(target, GL_INFO_LOG_LENGTH, &out_buffer_len);
+  gl_catch_errors( "glGetShaderiv" );
+
+  if (out_buffer_len)
+  {
+    out_buffer = new char [out_buffer_len];
+    if(!out_buffer ) 
+      raise( "could not alloc out_buffer when compiling shader" );
+
+    glGetShaderInfoLog(target, out_buffer_len, &out_buffer_written, out_buffer);
+    gl_catch_errors( "glGetShaderInfoLog" );
+
+    if( out_buffer_written != out_buffer_len ) {
+      std::cerr << "W: out_buffer_written (" << out_buffer_written << ") != out_buffer_len (" << out_buffer_len << ")" << std::endl;
+    }
+
+    std::cerr << out_buffer << std::endl;
+
+  }
+
+  if( !compiled ) raise( "failed to compile shader" );
 }
 
 void Shader::use() {

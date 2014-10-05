@@ -9,9 +9,13 @@
 class Mesh {
 private:
 
+  MeshLoader::node_p m_vertex_data;
+
   GLuint m_vao_handle;
 
-  GLuint m_objects[3];
+  // one of these is the VBO for VN
+  // two is index buffer
+  GLuint m_objects[2];
 
   int m_num_vertices;
   int m_num_indices;

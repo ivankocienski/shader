@@ -9,6 +9,13 @@ public:
 
   typedef unsigned short index_t;
 
+  typedef struct _node_s {
+    float position[3];
+    float normal[3];
+    char _padding[2];
+  } node_t, *node_p;
+
+
 private:
 
   std::vector<float>   m_vertex_data;
@@ -21,16 +28,19 @@ public:
 
   void load_from_obj_file( const char* );
 
-  size_t vertex_byte_size() const;
+  size_t data_byte_size() const;
+  //size_t vertex_byte_size() const;
   size_t index_byte_size() const;
-  size_t normal_byte_size() const;
+  //size_t normal_byte_size() const;
 
   size_t vertex_count() const;
   size_t index_count() const;
-  size_t normal_count() const;
+  //size_t normal_count() const;
 
-  const float* vertex_ptr() const;
+  //const float* vertex_ptr() const;
   const index_t* index_ptr() const;
-  const float* normal_ptr() const;
+  //const float* normal_ptr() const;
+
+  void write_vertex_data_to_buffer( node_p ) const;
 };
 
