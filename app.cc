@@ -46,6 +46,8 @@ void App::init() {
   m_shader.use();
   m_light_vector = m_shader.get_uniform_var( "lightDir" );
 
+  m_font.initialize( 15, "data/OCRA.ttf" );
+
 }
 
 void App::tick() {
@@ -55,6 +57,8 @@ void App::tick() {
   glLoadIdentity();     
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+  m_font.draw( 10, 10, "Stanford Bunny" );
 
   gluLookAt(
     /* position */
@@ -73,6 +77,9 @@ void App::tick() {
     -5.0
   );
 
+
+  glPushMatrix();
+
   glTranslatef( 0, -1.5, 0.0 );
   glScalef( 0.2, 0.2, 0.2 );
   glRotatef( m_angle, 0.0, 0.1, 0 );
@@ -81,5 +88,8 @@ void App::tick() {
 
   m_light_vector.set( 1, 0, 0 );
   m_mesh.bind_and_draw();
+
+  glPopMatrix();
+
 }
 

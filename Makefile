@@ -1,8 +1,8 @@
 
 OUTFILE=shader
-CFLAGS=-Wall -g
-LFLAGS=-g
-LIBS=-lglfw -lGL -lGLU -lGLEW -lboost_regex
+CFLAGS=-Wall -g `freetype-config --cflags`
+LFLAGS=-g -rdynamic
+LIBS=-lglfw -lGL -lGLU -lGLEW -lboost_regex `freetype-config --libs`
 
 OBJECTS= \
 	main.o \
@@ -10,7 +10,9 @@ OBJECTS= \
 	app.o \
 	shader.o \
 	globals.o \
-	mesh_loader.o
+	mesh_loader.o \
+	font.o \
+	exception.o
 
 
 all: $(OBJECTS)

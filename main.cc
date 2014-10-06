@@ -58,8 +58,8 @@ int main( int argc, char** argv ) {
       glfwPollEvents();
     } 
 
-  } catch( char const * msg ) {
-    cerr << "E: " << msg << endl; 
+  } catch( const IKException &ex ) {
+    ex.report();
     code = -1;
   }
 

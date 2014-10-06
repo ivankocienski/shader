@@ -10,6 +10,9 @@ varying float intensity;
 
 void main()
 {
-  intensity = dot(lightDir, in_Normal);
+  vec4 ld4 = vec4( lightDir, 0.5 );
+  vec4 n4  = vec4( in_Normal, 1 );
+
+  intensity = dot(ld4, gl_ModelViewMatrix * n4);
   gl_Position = ftransform();
 }

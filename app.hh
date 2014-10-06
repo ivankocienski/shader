@@ -3,13 +3,16 @@
 
 #include "mesh.hh"
 #include "shader.hh"
+#include "font.hh"
 
 class App {
 private:
 
   Mesh   m_mesh;
   Shader m_shader;
-  float  m_angle;
+  Font   m_font;
+
+  float  m_angle; 
 
   ShaderUniformVar m_light_vector;
   
