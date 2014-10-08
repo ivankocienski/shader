@@ -8,9 +8,6 @@
 
 /* NOTE: at the moment only ONE font is handled. boo! */
 
-class Font;
-
-
 class FontRenderer {
 private:
 
@@ -20,7 +17,6 @@ private:
   int m_size;
 
   bool  m_ch_draw;
-  float m_ch_t_xo;
   float m_ch_t_yo;
   float m_ch_w;
   float m_ch_h;
@@ -33,7 +29,6 @@ public:
   void render( char, GLuint );
 
   bool  draw();
-  float t_xo();
   float t_yo();
   float w();
   float h();
@@ -45,7 +40,6 @@ public:
 
   typedef struct {
     bool draw;
-    float t_xo;
     float t_yo;
     float w;
     float h;
@@ -62,8 +56,6 @@ private:
   ShaderUniformVar m_color;
   
   char_t m_chars[128];
-  //int m_width[128];
-  //int m_height;
 
   void setup_shader();
   void setup_vbo();
@@ -76,7 +68,6 @@ public:
   void initialize( int, const char* );
   void draw( int, int, const char* );
   void color( float, float, float );
-
-  void hack();
+  void activate();
 };
 

@@ -25,26 +25,22 @@ void App::init() {
 
   glClearColor( 0, 0, 1, 0 );
 
-  //glEnable( GL_DEPTH_TEST );
-  //glEnable( GL_CULL_FACE );
+  MeshLoader ml;
+  ml.load_from_obj_file( "data/bunny-normalized.obj" );
 
-  //MeshLoader ml;
-  //ml.load_from_obj_file( "data/bunny-normalized.obj" );
-  //ml.load_from_obj_file( "data/quad.obj" );
+  m_mesh.load_from( ml ); 
+  m_mesh.set_shader_attribute(0);
 
-  //m_mesh.load_from( ml ); 
-  //m_mesh.set_shader_attribute(0);
-
-  //m_shader.vertex().load_from( "data/vertex.vs" );
-  //m_shader.fragment().load_from( "data/fragment.fs" );
+  m_shader.vertex().load_from( "data/vertex.vs" );
+  m_shader.fragment().load_from( "data/fragment.fs" );
   
-  //m_shader.bind_attribute( 0, "in_Position" );
-  //m_shader.bind_attribute( 1, "in_Normal" );
+  m_shader.bind_attribute( 0, "in_Position" );
+  m_shader.bind_attribute( 1, "in_Normal" );
 
-  //m_shader.link(); 
+  m_shader.link(); 
 
-  //m_shader.use();
-  //m_light_vector = m_shader.get_uniform_var( "lightDir" );
+  m_shader.use();
+  m_light_vector = m_shader.get_uniform_var( "lightDir" );
 
   m_font.initialize( 25, "data/OCRA.ttf" );
 
@@ -57,18 +53,6 @@ void App::tick() {
   glLoadIdentity();     
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-
-  m_font.color( 0, 0, 0 );
-  m_font.draw( 21, 21, "Stanford Bunny" );
-
-  m_font.color( 1, 1, 1 );
-  m_font.draw( 20, 20, "Stanford Bunny" );
-
-
-  //m_font.hack();
-
-  return;
 
   gluLookAt(
     /* position */
@@ -87,19 +71,32 @@ void App::tick() {
     -5.0
   );
 
+  glEnable( GL_DEPTH_TEST );
+  glEnable( GL_CULL_FACE );
 
   glPushMatrix();
 
-  glTranslatef( 0, -1.5, 0.0 );
-  glScalef( 0.2, 0.2, 0.2 );
-  glRotatef( m_angle, 0.0, 0.1, 0 );
+    glTranslatef( 0, -1.5, 0.0 );
+    glScalef( 0.2, 0.2, 0.2 );
+    glRotatef( m_angle, 0.0, 0.1, 0 );
 
-  m_shader.use();
+    m_shader.use();
 
-  m_light_vector.set( 1, 0, 0 );
-  m_mesh.bind_and_draw();
+    m_light_vector.set( 1, 0, 0 );
+    m_mesh.bind_and_draw();
 
   glPopMatrix();
 
+
+  m_font.activate();
+
+  m_font.color( 0, 0, 0 );
+  m_font.draw( 21, 21, "Stanford Bunny" );
+
+  m_font.color( 1, 1, 1 );
+  m_font.draw( 20, 20, "Stanford Bunny" );
+
+  m_font.color( 1, 1, 0 );
+  m_font.draw( 20, 60, "ABC abc 123" );
 }
 

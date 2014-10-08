@@ -57,10 +57,7 @@ void FontRenderer::render( char ch, GLuint tx ) {
   m_ch_draw = true;
   m_ch_w    = m_face->glyph->bitmap.width;
   m_ch_h    = m_face->glyph->bitmap.rows;
-  m_ch_t_xo = m_face->glyph->bitmap_left - m_ch_w;
-  m_ch_t_yo = m_size - m_face->glyph->bitmap_top; //  - m_ch_h;
-
-  cout << "ch=" << ch << "  yo=" << m_ch_t_yo << "  h=" << m_ch_h << endl;
+  m_ch_t_yo = m_size - m_face->glyph->bitmap_top;
 
   /* Upload the "bitmap", which contains an 8-bit grayscale image, as an alpha texture */
   glTexImage2D(
@@ -77,7 +74,6 @@ void FontRenderer::render( char ch, GLuint tx ) {
 }
 
 bool  FontRenderer::draw()  { return m_ch_draw; }
-float FontRenderer::t_xo()  { return m_ch_t_xo; }
 float FontRenderer::t_yo()  { return m_ch_t_yo; }
 float FontRenderer::w()     { return m_ch_w; }
 float FontRenderer::h()     { return m_ch_h; }
@@ -117,7 +113,6 @@ void Font::setup_vbo() {
 
 
   GLint a = m_font_shader.get_attribute_var( "coord" );
-  cout << "a=" << a << endl;
   gl_catch_errors( "get_attribute_var" );
 
   glEnableVertexAttribArray(a);
@@ -131,26 +126,18 @@ void Font::setup_vbo() {
 
 void Font::setup_font( int size, const char *path ) {
 
-  //int i;
-
-  glEnable( GL_TEXTURE_2D );
-
   glActiveTexture(GL_TEXTURE0);
   gl_catch_errors( "glActiveTexture" );
 
-  glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   glGenTextures( 128, m_textures );
   gl_catch_errors( "thing" );
 
-  FontRenderer fr( size, path );
-
+  FontRenderer fr( size, path ); 
   for( int i = 0; i < 128; i++ ) {
     fr.render( (char)i, m_textures[i] );
 
     m_chars[i].draw  = fr.draw();
-    m_chars[i].t_xo  = fr.t_xo();
     m_chars[i].t_yo  = fr.t_yo();
     m_chars[i].w     = fr.w();
     m_chars[i].h     = fr.h();
@@ -168,53 +155,24 @@ void Font::initialize( int size, const char *path ) {
   setup_font( size, path );
 }
 
-void Font::hack() {
-
-  m_font_shader.use();
-
-  glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-  glBindTexture(GL_TEXTURE_2D, m_textures[97]);
-
-  {
-    m_color.set( 1, 0, 0, 1 );
-
-    GLfloat box[4][4] = {
-      { -100.0, -100.0, 0, 0},
-      {  100.0, -100.0, 1, 0},
-      { -100.0,  100.0, 0, 1},
-      {  100.0,  100.0, 1, 1},
-    };
-
-    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(box), box );
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  }
-
-  {
-    m_color.set( 0, 1, 0, 1 );
-
-    GLfloat box[4][4] = {
-      { 700.0, 500.0, 0, 1},
-      { 800.0, 500.0, 1, 1},
-      { 700.0, 600.0, 0, 0},
-      { 800.0, 600.0, 1, 0},
-    };
-
-    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(box), box );
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  }
+void Font::color( float r, float g, float b ) { 
+  m_color.set( r, g, b, 1 );
 }
 
-void Font::color( float r, float b, float g ) { 
-  m_color.set( r, g, b, 1 );
+void Font::activate() { 
+
+  glDisable( GL_DEPTH_TEST );
+  glDisable( GL_CULL_FACE );
+
+  glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  
+  m_font_shader.use(); 
+  glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 }
 
 void Font::draw( int x, int y, const char *text ) {
 
-  m_font_shader.use();
-
-
-  glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-  
   while( *text ) {
 
     char_t *ct = &m_chars[*text];
@@ -234,6 +192,7 @@ void Font::draw( int x, int y, const char *text ) {
       glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(box), box );
 
       glBindTexture(GL_TEXTURE_2D, m_textures[*text]);
+
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
