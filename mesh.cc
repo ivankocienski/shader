@@ -13,16 +13,18 @@
 using namespace std;
 
 Mesh::Mesh() {
-  m_vao_handle = 0;
+  m_vao_handle  = 0;
+  m_vertex_data = NULL;
+
   memset( m_objects, 0, sizeof(m_objects));
 }
 
 Mesh::~Mesh() {
 
-  glDeleteBuffers( 2, m_objects );
-  //gl_catch_errors( "glDeleteBuffers" );
-
   if(m_vao_handle) { 
+    glDeleteBuffers( 2, m_objects );
+    //gl_catch_errors( "glDeleteBuffers" );
+
     glDeleteVertexArrays( 1, &m_vao_handle );
     //gl_catch_errors( "glDeleteVertexArrays" );
   }

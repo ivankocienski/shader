@@ -36,11 +36,22 @@ void ShaderUniformVar::set( float v ) {
   gl_catch_errors( "glUniform1f" );
 }
 
+void ShaderUniformVar::set( float v1, float v2 ) {
+  float a[] = { v1, v2 };
+  glUniform2fv(m_handle, 1, a);
+  gl_catch_errors( "glUniform2fv" );
+}
+
 void ShaderUniformVar::set( float v1, float v2, float v3 ) {
   float a[] = { v1, v2, v3 };
-  //if(!m_handle) raise( "bad end" );
   glUniform3fv(m_handle, 1, a);
   gl_catch_errors( "glUniform3fv" );
+}
+
+void ShaderUniformVar::set( float v1, float v2, float v3, float v4 ) {
+  float a[] = { v1, v2, v3, v4 };
+  glUniform4fv(m_handle, 1, a);
+  gl_catch_errors( "glUniform4fv" );
 }
 
 /* 
@@ -113,7 +124,7 @@ void ShaderComponent::load_from( const char* path ) {
   glGetShaderiv(m_handle, GL_INFO_LOG_LENGTH, &out_buffer_len);
   gl_catch_errors( "glGetShaderiv" );
 
-  if (out_buffer_len)
+  if (out_buffer_len > 1)
   {
     out_buffer = new char [out_buffer_len];
     if(!out_buffer ) 
@@ -213,7 +224,8 @@ void Shader::link() {
     glGetProgramInfoLog( m_program, 8192, &log_len, log_buffer );
     gl_catch_errors( "glGetProgramInfoLog" );
 
-    cerr << log_buffer << endl;
+    if( log_len > 0 )
+      cerr << log_buffer << endl;
 
     delete log_buffer;
   }
@@ -235,4 +247,8 @@ void Shader::use() {
 
 ShaderUniformVar Shader::get_uniform_var( const char *n ) {
   return ShaderUniformVar( m_program, n );
+}
+
+GLint Shader::get_attribute_var( const char *n ) {
+  return glGetAttribLocation( m_program, n );
 }

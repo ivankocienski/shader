@@ -1,3 +1,4 @@
 shader
 tags
 *.o
+temp.cc

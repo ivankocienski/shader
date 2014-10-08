@@ -17,7 +17,9 @@ public:
   ShaderUniformVar(GLuint, const char* );
 
   void set( float );
+  void set( float, float );
   void set( float, float, float );
+  void set( float, float, float, float );
 };
 
 class ShaderComponent : boost::noncopyable {
@@ -66,6 +68,7 @@ public:
   void use();
 
   ShaderUniformVar get_uniform_var( const char* );
+  GLint get_attribute_var( const char* );
 
 };
 
