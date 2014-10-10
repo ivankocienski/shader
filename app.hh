@@ -1,20 +1,20 @@
 
 #pragma once
 
-#include "mesh.hh"
-#include "shader.hh"
 #include "font.hh"
+
+#include "bunny.hh"
+#include "background.hh"
 
 class App {
 private:
 
-  Mesh   m_mesh;
-  Shader m_shader;
   Font   m_font;
-
   float  m_angle; 
 
-  ShaderUniformVar m_light_vector;
+  Bunny m_bunny;
+  Background m_bg;
+
   
 
 public:
