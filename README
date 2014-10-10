@@ -1,0 +1,31 @@
+
+OpenGL shaders
+==============
+
+Technical demo of the use of shaders, VBOs, VAOs and what not.
+
+Features
+- can load obj
+- script to give obj normals
+- VBO/VAOs
+- streaming VBO (for font)
+- fonts (freetype library)
+- PNG loading
+- exceptions with stack trace
+
+Library's required
+- gl, glu, glew
+- glfw
+- png
+- boost 
+
+
+Compile
+=======
+
+Should compile with a recent version of GCC. Sorry, some GCC specific code
+is in the exception stacktrace code.
+
+  make
+
+
