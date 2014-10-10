@@ -9,6 +9,7 @@ private:
 
   Mesh   m_mesh;
   Shader m_shader;
+  Shader m_shadow_shader;
 
   ShaderUniformVar m_light_vector;
 

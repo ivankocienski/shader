@@ -62,7 +62,7 @@ void App::tick() {
   m_font.activate();
 
   m_font.color( 1, 1, 1 );
-  m_font.draw( 20, 20, "Stanford Bunny" );
+  m_font.draw( 20, 550, "Stanford Bunny" );
 
 }
 

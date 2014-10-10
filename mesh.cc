@@ -131,7 +131,7 @@ void Mesh::bind() {
 }
 
 void Mesh::draw() {
-  //glDrawElements(GL_TRIANGLES, 0, m_num_indices);
+  glDrawElements( GL_TRIANGLES, m_num_indices * 3, GL_UNSIGNED_SHORT, NULL );
 }
 
 void Mesh::bind_and_draw() {
